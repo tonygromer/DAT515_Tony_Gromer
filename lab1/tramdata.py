@@ -174,8 +174,8 @@ def dialogue(jsonfile):
 
 
 dirname = os.path.dirname(__file__)
-tramstop_dir = os.path.join(dirname, '../chalmers-advanced-python/labs/data/tramstops.json')
-tramline_dir = os.path.join(dirname, '../chalmers-advanced-python/labs/data/tramlines.txt')
+tramstop_dir = os.path.join(dirname, './data/tramstops.json')
+tramline_dir = os.path.join(dirname, './data/tramlines.txt')
 
 if __name__ == '__main__':
     if sys.argv[1:] == ['init']:
