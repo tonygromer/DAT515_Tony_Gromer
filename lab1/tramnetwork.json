@@ -534,7 +534,7 @@
         }
     },
     "lines": {
-        "1:": [
+        "1": [
             "Östra Sjukhuset",
             "Tingvallsvägen",
             "Kaggeledstorget",
@@ -565,7 +565,7 @@
             "Smaragdgatan",
             "Opaltorget"
         ],
-        "2:": [
+        "2": [
             "Mölndals Innerstad",
             "Mölndals sjukhus",
             "Lackarebäck",
@@ -594,7 +594,7 @@
             "Marklandsgatan",
             "Axel Dahlströms Torg"
         ],
-        "3:": [
+        "3": [
             "Marklandsgatan",
             "Bokekullsgatan",
             "Högsbogatan",
@@ -626,7 +626,7 @@
             "Sanatoriegatan",
             "Virginsgatan"
         ],
-        "4:": [
+        "4": [
             "Mölndals Innerstad",
             "Mölndals sjukhus",
             "Lackarebäck",
@@ -649,7 +649,7 @@
             "Storås",
             "Angered Centrum"
         ],
-        "5:": [
+        "5": [
             "Östra Sjukhuset",
             "Tingvallsvägen",
             "Kaggeledstorget",
@@ -687,7 +687,7 @@
             "Temperaturgatan",
             "Varmfrontsgatan"
         ],
-        "6:": [
+        "6": [
             "Aprilgatan",
             "Allhelgonakyrkan",
             "Kortedala Torg",
@@ -735,7 +735,7 @@
             "Temperaturgatan",
             "Varmfrontsgatan"
         ],
-        "7:": [
+        "7": [
             "Komettorget",
             "Rymdtorget Spårvagn",
             "Teleskopgatan",
@@ -772,7 +772,7 @@
             "Smaragdgatan",
             "Opaltorget"
         ],
-        "8:": [
+        "8": [
             "Angered Centrum",
             "Storås",
             "Hammarkullen",
@@ -799,7 +799,7 @@
             "Positivgatan",
             "Frölunda Torg Spårvagn"
         ],
-        "9:": [
+        "9": [
             "Angered Centrum",
             "Storås",
             "Hammarkullen",
@@ -820,7 +820,7 @@
             "Sandarna",
             "Kungssten"
         ],
-        "10:": [
+        "10": [
             "Doktor Sydows Gata",
             "Doktor Fries Torg",
             "Wavrinskys Plats",
@@ -846,7 +846,7 @@
             "Friskväderstorget",
             "Väderilsgatan"
         ],
-        "11:": [
+        "11": [
             "Saltholmen",
             "Roddföreningen",
             "Långedrag",
@@ -886,7 +886,7 @@
             "Rymdtorget Spårvagn",
             "Komettorget"
         ],
-        "13:": [
+        "13": [
             "Saltholmen",
             "Roddföreningen",
             "Långedrag",

@@ -4,8 +4,6 @@ from math import cos, sqrt, radians
 import os
 
 
-
-
 def build_tram_stops(jsonobject):
     temp_dictionary = json.load(jsonobject)
     stop_dictionary = {}
@@ -21,19 +19,19 @@ def build_tram_lines(lines):
     temp_lines = lines.read()
     line_dictionary = {}
     time_dictionary = {}
-    current_stop = ''       # Keep track of which stop you are at
+    current_line = ''       # Keep track of which stop you are at
 
     text = [t for t in temp_lines.splitlines() if t !=''] # Remove empty '' from lines
     
     for i,line in enumerate(text):
         if line[0].isdigit():
             # If first character is a number create a new key with an empty list as value
-           current_stop = line
-           line_dictionary[line] = []
+           current_line = line.strip(':')
+           line_dictionary[current_line] = []
         elif line[0].isalpha():
             # If the first character is something else, remove time and add it to current stop´s list
             s = remove_non_alpha(line)
-            line_dictionary[current_stop].append(s)
+            line_dictionary[current_line].append(s)
             
             if not s in time_dictionary:
                 time_dictionary[s] = {}
@@ -73,12 +71,14 @@ def remove_non_alpha(line):
 def lines_via_stop(lines, stop):
     # If the stop exists in the line, add it to list
     connected_lines = [line for line in lines if stop in lines[line]]
+    connected_lines.sort(key = int)
     return connected_lines
 
 def lines_between_stops(lines, stop1, stop2):
     # If both stops exists in the line, add it to list
     connected_lines = [line for line in lines if ((stop1 in lines[line]) and (stop2 in lines[line]))]
-    return connected_lines
+    if not connected_lines:
+        return connected_lines
 
 def time_between_stops(lines, times, line, stop1, stop2):
     # list of stops in line
@@ -87,13 +87,17 @@ def time_between_stops(lines, times, line, stop1, stop2):
     i_stop1 = line_list.index(stop1)
     i_stop2 = line_list.index(stop2)
 
+    # check the order of the stops, and if they are not as in the list, swap
+    if i_stop2 < i_stop1:
+        i_stop2, i_stop1 = i_stop1, i_stop2
     time = 0
+
     # Save the first stop, then add the time for each stop along the line
     prev_stop = line_list[i_stop1]
     for stop in line_list[i_stop1+1:i_stop2+1]:
         time += times[prev_stop][stop]
+        prev_stop = stop
         
-
     return time
 
 def distance_between_stops(stops, stop1, stop2):
@@ -121,7 +125,11 @@ def answer_query(tramdict, query):
     if split_query[0] == 'via':
         try:
             stop = " ".join(split_query[1:len(split_query)])
-            return lines_via_stop(tramdict['lines'], stop)
+            l = lines_via_stop(tramdict['lines'], stop)
+            if l:
+                return l
+            else:
+                raise Exception()
         except:
             print('unknown arguments')
             return False      
@@ -131,7 +139,11 @@ def answer_query(tramdict, query):
             stop1 = " ".join(split_query[1:split_query.index('and')])
             stop2 = " ".join(split_query[split_query.index('and')+1:len(split_query)])
 
-            return lines_between_stops(tramdict['lines'], stop1, stop2)
+            l = lines_between_stops(tramdict['lines'], stop1, stop2)
+            if l:
+                return l
+            else:
+                raise Exception()
         except:
             print('unknown arguments')
             return False 
@@ -141,7 +153,11 @@ def answer_query(tramdict, query):
             line = split_query[2]
             stop1 = " ".join(split_query[4:split_query.index('to')])
             stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-            return time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
+            t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
+            if t:
+                return t
+            else:
+                raise Exception()
         except:
             print('unknown arguments')
             return False 
@@ -151,7 +167,11 @@ def answer_query(tramdict, query):
             stop1 = " ".join(split_query[2:split_query.index('to')])
             stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
             print(stop1,stop2)
-            return distance_between_stops(tramdict['stops'], stop1, stop2)
+            d = distance_between_stops(tramdict['stops'], stop1, stop2)
+            if d:
+                return d
+            else:
+                raise Exception()
         except:
             print('unknown arguments')
             return False 
