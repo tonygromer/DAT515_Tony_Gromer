@@ -11,6 +11,7 @@ class TestTramData(unittest.TestCase):
             tramdict = json.loads(trams.read())
             self.stopdict = tramdict['stops']
             self.linedict = tramdict['lines']
+            self.timedict = tramdict['times']
         
         with open(ORG_LINES) as lines:
             self.tram_lines = lines.read()
@@ -60,35 +61,38 @@ class TestTramData(unittest.TestCase):
 
     
     def test_dialouge(self):
-        tramdict = {'stops':self.stopdict, 'lines':self.linedict}
+        tramdict = {'stops':self.stopdict, 'lines':self.linedict, 'times':self.timedict}
         # test line via stop
         sort = True
         for stop in self.stopdict:
             query = 'via ' + stop
             via = answer_query(tramdict, query)
-            
-            if via != sorted(via, key = int):
+            if via != sorted(via, key = int):  # type: ignore
                 sort = False
         self.assertTrue(sort, msg = 'Not all lists are sorted')
         
         sort = True
         # test lines between stop
+        
         for stop1 in self.stopdict:
             for stop2 in self.stopdict:
                 query = 'between ' + stop1 + ' and ' + stop2
                 between = answer_query(tramdict, query)
-                if between and (between != sorted(between, key = int)):
+                if between and (between != sorted(between, key = int)):  # type: ignore
                     sort = False
         self.assertTrue(sort, msg = 'Not all lists are sorted')
         
-
-
         # test time between stop
-        
-        # test distance between stops
+        for line in self.linedict:
+            for i,stop1 in enumerate(self.linedict[line]):
+                for stop2 in self.linedict[line][i:len(self.linedict[line])]:
+                    query_f = 'time with ' + line + ' from ' + stop1 + ' to ' + stop2
+                    query_b = 'time with ' + line + ' from ' + stop2 + ' to ' + stop1
+                    time_forwards = answer_query(tramdict, query_f)
+                    time_backwards = answer_query(tramdict, query_b)
 
-        
-        
+                    self.assertEqual(time_forwards, time_backwards, msg = 'Time from A to B is not equal to B to A')
+
         return
 
 

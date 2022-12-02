@@ -77,7 +77,7 @@ def lines_via_stop(lines, stop):
 def lines_between_stops(lines, stop1, stop2):
     # If both stops exists in the line, add it to list
     connected_lines = [line for line in lines if ((stop1 in lines[line]) and (stop2 in lines[line]))]
-    if not connected_lines:
+    if connected_lines:
         return connected_lines
 
 def time_between_stops(lines, times, line, stop1, stop2):
@@ -123,61 +123,44 @@ def answer_query(tramdict, query):
     # Cases for different inputs. Uses " ".join() to reassemble multiple-word stops.
     # Calls appropiate function. 
     if split_query[0] == 'via':
-        try:
-            stop = " ".join(split_query[1:len(split_query)])
-            l = lines_via_stop(tramdict['lines'], stop)
-            if l:
-                return l
-            else:
-                raise Exception()
-        except:
-            print('unknown arguments')
-            return False      
+    
+        stop = " ".join(split_query[1:len(split_query)])
+        l = lines_via_stop(tramdict['lines'], stop)
+        if l:
+            return l
+        else:
+            return None  
 
     elif split_query[0] == 'between':
-        try:
-            stop1 = " ".join(split_query[1:split_query.index('and')])
-            stop2 = " ".join(split_query[split_query.index('and')+1:len(split_query)])
+        stop1 = " ".join(split_query[1:split_query.index('and')])
+        stop2 = " ".join(split_query[split_query.index('and')+1:len(split_query)])
 
-            l = lines_between_stops(tramdict['lines'], stop1, stop2)
-            if l:
-                return l
-            else:
-                raise Exception()
-        except:
-            print('unknown arguments')
-            return False 
+        l = lines_between_stops(tramdict['lines'], stop1, stop2)
+        if l:
+            return l
+        else:
+            return None
         
     elif split_query[0:2] == ['time', 'with']:
-        try:
-            line = split_query[2]
-            stop1 = " ".join(split_query[4:split_query.index('to')])
-            stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-            t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
-            if t:
-                return t
-            else:
-                raise Exception()
-        except:
-            print('unknown arguments')
-            return False 
+        line = split_query[2]
+        stop1 = " ".join(split_query[4:split_query.index('to')])
+        stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
+        t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
+        if t:
+            return t
+        else:
+            return None
 
     elif split_query[0:2] == ['distance', 'from']:
-        try:
-            stop1 = " ".join(split_query[2:split_query.index('to')])
-            stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-            print(stop1,stop2)
-            d = distance_between_stops(tramdict['stops'], stop1, stop2)
-            if d:
-                return d
-            else:
-                raise Exception()
-        except:
-            print('unknown arguments')
-            return False 
-    
+        stop1 = " ".join(split_query[2:split_query.index('to')])
+        stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
+        d = distance_between_stops(tramdict['stops'], stop1, stop2)
+        if d:
+            return d
+        else:
+            return None
+
     else:
-        print('sorry, try again')
         return False 
     
 
@@ -190,7 +173,14 @@ def dialogue(jsonfile):
         if query == 'quit':
             quit()
         
-        print(answer_query(tram_network, query))
+        
+        ans = answer_query(tram_network, query)
+        if ans:
+            print(ans)
+        elif ans == None: 
+            print("unknown paramter")
+        else:
+            print("sorry, try again")
 
 
 dirname = os.path.dirname(__file__)
