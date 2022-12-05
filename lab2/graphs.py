@@ -48,6 +48,23 @@ class Graph:
     def set_vertex_value(self, vertex, value):
         self._valuelist[vertex] = value
 
+    def add_edge(self, a, b):
+        if a in self._adjlist:
+            self._adjlist[a].append(b)
+        else:
+            self._adjlist[a] = [b]
+        if b in self._adjlist:
+            self._adjlist[b].append(a)
+        else:
+            self._adjlist[b] = [a]
+
+    def remove_edge(self,a,b):
+        if b in self._adjlist[a]:
+            self._adjlist[a].remove(b)
+        if a in self._adjlist[b]:
+            self._adjlist[b].remove(a)
+
+
 
 class WeightedGraph(Graph):
     def __init__(self, startlist = None):
@@ -81,8 +98,6 @@ def dijkstra(graph, source, cost=lambda u,v: 1):
         Q.append(v)
         shortest_paths[v] = [source]
     dist[source] = 0
-    
-    print(Q)
 
     while Q:
         d2 = {v:dist[v] for v in dist if v in Q}
