@@ -1,10 +1,9 @@
 import graphviz
-import networkx
 
 class Graph:
     def __init__(self, edgelist = None):
         self._adjlist = dict()
-        self._valuelist =  dict()
+        self._valuelist = dict()
 
         if edgelist:
             for edge in edgelist:
@@ -52,10 +51,10 @@ class Graph:
 
 class WeightedGraph(Graph):
     def __init__(self, startlist = None):
-        super().__init__()
         self._weightlist: dict
         if startlist:
-            self._weightlist = startlist
+            self._weightlist = startlist['weight']
+            super().__init__(startlist['edgelist'])
 
     def get_weight(self, vertex1, vertex2):
         return self._weightlist[(vertex1, vertex2)]
@@ -69,7 +68,7 @@ class WeightedGraph(Graph):
 
 # in graphs.py
 def dijkstra(graph, source, cost=lambda u,v: 1):
-    """
+    
     shortest_paths = {}
     prev = {}
     dist = {}
@@ -80,35 +79,35 @@ def dijkstra(graph, source, cost=lambda u,v: 1):
         dist[v] = float('inf')
         prev[v] = None
         Q.append(v)
-        shortest_paths[v] = []
+        shortest_paths[v] = [source]
     dist[source] = 0
-       
+    
+    print(Q)
+
     while Q:
         d2 = {v:dist[v] for v in dist if v in Q}
-        u =  min(d2, key = dist.get)
+        u =  min(d2, key = d2.get)  # type: ignore
         Q.remove(u)
-        
         neighbours = [node for node in graph.neighbors(u) if node in Q]
         for v in neighbours:
             alt = dist[u] + cost(u,v)
             if alt < dist[v]:
                 dist[v] = alt
                 prev[v] = u
-                shortest_paths[v] = shortest_paths[u]
-    print(shortest_paths)
-    ret_list = {'path':}
-    return ret_list
-    """
-    def costs2attributes(G, cost, attr='weight'):
-        for a, b in G.edges():
-            G[a][b][attr] = cost(a, b)
-    return networkx.shortest_path(graph, source=None, target=None, weight=None, method='dijkstra')
+                shortest_paths[v] = shortest_paths[u] + [v]
+    ret_list = {}
+    for v in graph.vertices():
+        ret_list[v] = {'path':shortest_paths[v], 'dist': dist[v]}
 
+    return ret_list
+    
     
 def visualize(graph, view='dot', name='mygraph', nodecolors={}, engine='dot'):
     dot = graphviz.Graph()
 
     for v in graph.vertices():
+        if str(v) in nodecolors:
+            dot.node(str(v), color = nodecolors[str(v)])
         dot.node(str(v))
 
     for (v, w) in graph.edges():
@@ -119,9 +118,8 @@ def visualize(graph, view='dot', name='mygraph', nodecolors={}, engine='dot'):
     
 def view_shortest(G, source, target, cost=lambda u,v: 1):
     path = dijkstra(G, source, cost)[target]['path']
-    print(path)
-    colormap = {str(v): 'orange' for v in path}
-    print(colormap)
+    colormap = {str(v): 'pink' for v in path}
+    print('this is colormap ', colormap)
     visualize(G, view='view', nodecolors=colormap)
 
 def demo():
