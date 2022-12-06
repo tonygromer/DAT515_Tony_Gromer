@@ -21,7 +21,7 @@ class Graph:
         return self._adjlist[vertex]
     
     def vertices(self):
-        return self._adjlist.keys()
+        return list(self._adjlist.keys())
     
     def edges(self):
         edges = []
