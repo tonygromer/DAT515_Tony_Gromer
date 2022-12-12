@@ -98,7 +98,7 @@ def time_between_stops(lines, times, line, stop1, stop2):
         time += times[prev_stop][stop]
         prev_stop = stop
         
-    return str(time)
+    return time
 
 def distance_between_stops(stops, stop1, stop2):
     stop1_pos = stops[stop1]
@@ -113,7 +113,7 @@ def distance_between_stops(stops, stop1, stop2):
     R = 6371 #km
     d = R*sqrt(d_phi**2 + (cos(phi_m)*d_lambda)**2)
     
-    return str(d)   
+    return d  
 
 def answer_query(tramdict, query):
     # answer_query recieves entire tramnetwork
@@ -145,8 +145,11 @@ def answer_query(tramdict, query):
         line = split_query[2]
         stop1 = " ".join(split_query[4:split_query.index('to')])
         stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-        t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
-        if t:
+        try:
+            t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
+        except:
+            return None
+        if str(t):
             return t
         else:
             return None
@@ -178,7 +181,7 @@ def dialogue(jsonfile):
         if ans:
             print(ans)
         elif ans == None: 
-            print("unknown paramter")
+            print("unknown parameter")
         else:
             print("sorry, try again")
 

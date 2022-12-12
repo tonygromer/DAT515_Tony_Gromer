@@ -17,21 +17,28 @@ def show_shortest(dep, dest):
     
     # If you do Bonus 1, you could also tell which tram lines you use and where changes
     # happen. But since this was not mentioned in lab3.md, it is not compulsory.
-    quickest = [dep, 'Chalmers', dest]
-    shortest = [dep, 'Chalmers', dest] 
+    time_dij = dijkstra(network,dep, network.transition_time)[dest]
+    dist_dij = dijkstra(network, dep, network.geo_distance)[dest]
+
+    quickest = time_dij['path']
+    shortest = dist_dij['path']
     
-    timepath = 'Quickest: ' + ', '.join(quickest) + ', 5 minutes'
-    geopath = 'Shortest: ' + ', '.join(shortest) + ', 100 km'
+    timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(time_dij['dist']) + ' minutes'
+    geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(dist_dij['dist']) + ' km'
 
     def colors(v):
-        if v in shortest:
+        if v in shortest and v in quickest:
             return 'cyan'
+        elif v in quickest:
+            return 'orange'
+        elif v in shortest:
+            return 'green'
         else:
             return 'white'
             
 
     # this part should be left as it is:
     # change the SVG image with your shortest path colors
-    #color_svg_network(colormap=colors)
+    color_svg_network(colormap=colors) # type: ignore
     # return the path texts to be shown in the web page
     return timepath, geopath

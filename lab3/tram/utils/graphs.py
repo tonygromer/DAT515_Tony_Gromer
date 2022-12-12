@@ -84,7 +84,7 @@ class WeightedGraph(Graph):
 
 
 # in graphs.py
-def dijkstra(graph, source, cost=lambda u,v: 1):
+def dijkstra(graph, source, cost=lambda u,v: 1.0):
     
     shortest_paths = {}
     prev = {}

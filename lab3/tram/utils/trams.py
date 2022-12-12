@@ -55,8 +55,8 @@ class TramNetwork(WeightedGraph):
 
         return min(lon), min(lat), max(lon), max(lat)
 
-    def geo_distance(self, a,b):
-        return distance_between_stops(self._stopdict,a,b)
+    def geo_distance(self, u,v):
+        return distance_between_stops(self._stopdict,u,v)
 
     def line_stops(self, line):
         return self._linedict[line]
@@ -67,11 +67,11 @@ class TramNetwork(WeightedGraph):
     def stop_position(self, a):
         return self._stopdict[a]
 
-    def transition_time(self, a, b):
-        lines_between = lines_between_stops(self._linedict, a, b)
+    def transition_time(self, u, v):
+        lines_between = lines_between_stops(self._linedict, u, v)
         time_between = []
         for line in lines_between: #type: ignore
-            time_between.append(time_between_stops(self._linedict, self._timedict, line, a, b))
+            time_between.append(time_between_stops(self._linedict, self._timedict, line, u, v))
         
         return min(time_between)
 

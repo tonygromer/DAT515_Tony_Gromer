@@ -118,6 +118,8 @@ def distance_between_stops(stops, stop1, stop2):
 def answer_query(tramdict, query):
     # answer_query recieves entire tramnetwork
     # Splits query into words to find index for words
+    if query == '':
+        return False
     split_query = query.split()
     
     # Cases for different inputs. Uses " ".join() to reassemble multiple-word stops.
@@ -143,21 +145,25 @@ def answer_query(tramdict, query):
         
     elif split_query[0:2] == ['time', 'with']:
         line = split_query[2]
-        stop1 = " ".join(split_query[4:split_query.index('to')])
-        stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-        t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
-        if t:
-            return t
-        else:
+        
+        try:
+            stop1 = " ".join(split_query[4:split_query.index('to')])
+            stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
+            t = time_between_stops(tramdict['lines'], tramdict['times'], line, stop1, stop2)
+            if t:
+                return t
+        except:
             return None
 
+
     elif split_query[0:2] == ['distance', 'from']:
-        stop1 = " ".join(split_query[2:split_query.index('to')])
-        stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
-        d = distance_between_stops(tramdict['stops'], stop1, stop2)
-        if d:
-            return d
-        else:
+        try:
+            stop1 = " ".join(split_query[2:split_query.index('to')])
+            stop2 = " ".join(split_query[split_query.index('to')+1:len(split_query)])
+            d = distance_between_stops(tramdict['stops'], stop1, stop2)
+            if d:
+                return d
+        except:
             return None
 
     else:
