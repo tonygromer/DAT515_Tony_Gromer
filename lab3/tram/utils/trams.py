@@ -4,8 +4,8 @@ import json
 import math
 import os
 from .graphs import WeightedGraph
-import tramdata as td
-from django.conf import settings
+from .tramdata import lines_between_stops, time_between_stops, distance_between_stops, lines_via_stop
+from django.conf import settings #type: ignore
 
 
 # path changed from Lab2 version
@@ -56,22 +56,22 @@ class TramNetwork(WeightedGraph):
         return min(lon), min(lat), max(lon), max(lat)
 
     def geo_distance(self, a,b):
-        return td.distance_between_stops(self._stopdict,a,b)
+        return distance_between_stops(self._stopdict,a,b)
 
     def line_stops(self, line):
         return self._linedict[line]
 
     def stop_lines(self, a):
-        return td.lines_via_stop(self._linedict, a)
+        return lines_via_stop(self._linedict, a)
 
     def stop_position(self, a):
         return self._stopdict[a]
 
     def transition_time(self, a, b):
-        lines_between = td.lines_between_stops(self._linedict, a, b)
+        lines_between = lines_between_stops(self._linedict, a, b)
         time_between = []
         for line in lines_between: #type: ignore
-            time_between.append(td.time_between_stops(self._linedict, self._timedict, line, a, b))
+            time_between.append(time_between_stops(self._linedict, self._timedict, line, a, b))
         
         return min(time_between)
 

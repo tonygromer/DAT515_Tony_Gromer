@@ -4,7 +4,7 @@ from .trams import readTramNetwork
 from .graphs import dijkstra
 import os
 from .color_tram_svg import color_svg_network
-from django.conf import settings
+from django.conf import settings #type: ignore
 
 def show_shortest(dep, dest):
     # TODO: uncomment this when it works with your own code
@@ -32,6 +32,6 @@ def show_shortest(dep, dest):
 
     # this part should be left as it is:
     # change the SVG image with your shortest path colors
-    color_svg_network(colormap=colors)
+    #color_svg_network(colormap=colors)
     # return the path texts to be shown in the web page
     return timepath, geopath
