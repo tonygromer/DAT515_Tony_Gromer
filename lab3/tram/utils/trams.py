@@ -6,6 +6,7 @@ import os
 from .graphs import WeightedGraph
 from .tramdata import lines_between_stops, time_between_stops, distance_between_stops, lines_via_stop
 from django.conf import settings #type: ignore
+from itertools import combinations
 
 
 # path changed from Lab2 version
@@ -76,26 +77,81 @@ class TramNetwork(WeightedGraph):
         return min(time_between)
 
 
-def readTramNetwork(file = TRAM_FILE):
-    with open(file) as json_file:
-        tram_network = json.load(json_file)
-        return TramNetwork(tram_network['lines'], tram_network['stops'], tram_network['times'])
 
 
 # Bonus task 1: take changes into account and show used tram lines
 
-def specialize_stops_to_lines(network):
-    # TODO: write this function as specified
-    return network
+
+    def specialize_stops_to_lines(self):
+        # TODO: write this function as specified
+        verts = set()
+        edgelist = []
+        for line in self._linedict:
+            l = self._linedict[line]
+            for i in range(len(l)-1):
+                p1 = l[i]
+                p2 = l[i+1]
+                edgelist.append(((p1, line), (p2,line)))
+                verts.add((p1, line))
+                verts.add((p2,line))
+        for v1 in verts:
+            for v2 in verts:
+                if v1[0] == v2[0] and v1[1] != v2[1]:
+                    edgelist.append((v1,v2))
+
+        
+
+        weightlist = {}
+        """
+        for stop1 in self._timedict:
+            for stop2 in self._timedict[stop1]:
+                w = self._timedict[stop1][stop2]
+                stop1_temp, stop2_temp = stop1, stop2
+                if stop1 > stop2:
+                    stop1_temp, stop2_temp = stop2, stop1
+                    
+                weightlist[(stop1_temp, stop2_temp)] = w
+        """
+        
+        for edge in edgelist:
+            vert1 = edge[0]
+            vert2 = edge[1]
+            
+            
+            weightlist[edge] = self.specialized_transition_time(vert1,vert2)
+
+            
+
+        start_list = {'edgelist': edgelist, 'weight': weightlist}
+        #self._adjlist = dict()
+        #self._weightlist = dict()
+        super().__init__(start_list)
+
+        return self
 
 
-def specialized_transition_time(spec_network, a, b, changetime=10):
-    # TODO: write this function as specified
-    return changetime
+    def specialized_transition_time(self, u, v, changetime=10):
+        # TODO: write this function as specified
+    
+        if u[0] == v[0] and u[1] != v[1]:
+            return changetime
+        
+        try:
+            return self._timedict[u[0]][v[0]]
+        except:
+            return self._timedict[v[0]][u[0]]
 
 
-def specialized_geo_distance(spec_network, a, b, changedistance=0.02):
-    # TODO: write this function as specified
-    return changedistance
+    def specialized_geo_distance(self, u, v, changedistance=0.02):
+        # TODO: write this function as specified
+        if u[0] == v[0] and u[1] != v[1]:
+            return changedistance
+
+        return distance_between_stops(self._stopdict,u[0],v[0])
 
 
+
+def readTramNetwork(file = TRAM_FILE):
+    with open(file) as json_file:
+        tram_network = json.load(json_file)
+        return TramNetwork(tram_network['lines'], tram_network['stops'], tram_network['times'])

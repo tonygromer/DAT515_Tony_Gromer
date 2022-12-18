@@ -74,7 +74,10 @@ class WeightedGraph(Graph):
             super().__init__(startlist['edgelist'])
 
     def get_weight(self, vertex1, vertex2):
-        return self._weightlist[(vertex1, vertex2)]
+        try:
+            return self._weightlist[(vertex1, vertex2)]
+        except:
+            return self._weightlist[(vertex2, vertex1)]
 
     def set_weight(self, vertex1, vertex2, weight):
         if vertex1 > vertex2:
