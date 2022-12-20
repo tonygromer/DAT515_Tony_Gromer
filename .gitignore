@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Virtualenv
-lab3/myvenv/*
+myvenv/
 
 # Mac folder stuff
 .DS_store
