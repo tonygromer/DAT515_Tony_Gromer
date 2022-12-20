@@ -14,7 +14,9 @@ link_list = dict()
 
 for link in soup.find_all('a'):
     if search('/reseplanering/hallplatser/.+', link.get('href')):
-        link_list[link.text.strip().split()[0]] = avgangstavla + link.get('href').split('/')[-2]
+        stop = link.text.splitlines()[1].strip()[:-1]
+
+        link_list[stop] = avgangstavla + link.get('href').split('/')[-2]
 
 with open(TRAM_URL_FILE, 'w') as file:
     json.dump(link_list, file, indent=2, ensure_ascii=False)
