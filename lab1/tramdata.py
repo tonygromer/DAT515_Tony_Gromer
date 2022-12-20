@@ -113,7 +113,7 @@ def distance_between_stops(stops, stop1, stop2):
     R = 6371 #km
     d = R*sqrt(d_phi**2 + (cos(phi_m)*d_lambda)**2)
     
-    return str(d)   
+    return d   
 
 def answer_query(tramdict, query):
     # answer_query recieves entire tramnetwork

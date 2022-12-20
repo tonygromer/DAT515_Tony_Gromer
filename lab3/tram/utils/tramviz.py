@@ -17,6 +17,7 @@ def show_shortest(dep, dest):
     
     # If you do Bonus 1, you could also tell which tram lines you use and where changes
     # happen. But since this was not mentioned in lab3.md, it is not compulsory.
+    # Set to True to run with bonus 1, set to False for baseline
     Bonus1 = True
     
     if Bonus1:
@@ -28,20 +29,21 @@ def show_shortest(dep, dest):
         paths_dist = []
 
         for stop1 in dep_list:
+            time_dij = dijkstra(network, stop1, network.specialized_transition_time)
+            dist_dij = dijkstra(network, stop1, network.specialized_geo_distance)
+            
             for stop2 in dest_list:
-                time_dij = dijkstra(network, stop1, network.specialized_transition_time)[stop2]
-                dist_dij = dijkstra(network, stop1, network.specialized_geo_distance)[stop2]
-                paths_time.append(time_dij)
-                paths_dist.append(dist_dij)
-
-        quickest = min(paths_time, key = lambda x: x['dist'])
-        shortest = min(paths_dist, key = lambda x:x['dist'])
+                paths_time.append(time_dij[stop2])
+                paths_dist.append(dist_dij[stop2])
+       
+        quickest_nodes = min(paths_time, key = lambda x: x['dist'])
+        shortest_nodes = min(paths_dist, key = lambda x:x['dist'])
         
-        quickest_list = [stop[0] for stop in quickest['path']]
-        shortest_list = [stop[0] for stop in shortest['path']]
+        quickest = [stop[0] for stop in quickest_nodes['path']]
+        shortest = [stop[0] for stop in shortest_nodes['path']]
 
-        timepath = 'Quickest: ' + ', '.join(quickest_list) + ', ' + str(quickest['dist']) + ' minutes'
-        geopath = 'Shortest: ' + ', '.join(shortest_list) + ', ' + str(round(shortest['dist'],3)) + ' km'
+        timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(quickest_nodes['dist']) + ' minutes'
+        geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(round(shortest_nodes['dist'],3)) + ' km'
 
     else:
         time_dij = dijkstra(network,dep, network.transition_time)[dest]
@@ -51,14 +53,14 @@ def show_shortest(dep, dest):
         shortest = dist_dij['path']
         
         timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(time_dij['dist']) + ' minutes'
-        geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(dist_dij['dist']) + ' km'
+        geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(round(dist_dij['dist'],3)) + ' km'
 
     def colors(v):
-        if v in shortest_list and v in quickest_list:
+        if v in shortest and v in quickest:
             return 'cyan'
-        elif v in quickest_list:
+        elif v in quickest:
             return 'orange'
-        elif v in shortest_list:
+        elif v in shortest:
             return 'green'
         else:
             return 'white'

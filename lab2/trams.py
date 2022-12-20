@@ -80,10 +80,10 @@ class TramNetwork(graphs.WeightedGraph):
         lon = []
         
         for stop in self._stopdict:
-            lat.append(self._stopdict[stop]['lat'])
-            lon.append(self._stopdict[stop]['lon'])
+            lat.append(float(self._stopdict[stop]['lat']))
+            lon.append(float(self._stopdict[stop]['lon']))
 
-        return {'lat':[max(lat), min(lat)], 'lon':[max(lon), min(lon)]}
+        return min(lon), min(lat), max(lon), max(lat)
 
     def geo_distance(self, a,b):
         return td.distance_between_stops(self._stopdict,a,b)
@@ -95,7 +95,8 @@ class TramNetwork(graphs.WeightedGraph):
         return td.lines_via_stop(self._linedict, a)
 
     def stop_position(self, a):
-        return self._stopdict[a]
+        #return self._stopdict[a]
+        return self._stopdict[a]['lon'],self._stopdict[a]['lat']
 
     def transition_time(self, a, b):
         lines_between = td.lines_between_stops(self._linedict, a, b)
