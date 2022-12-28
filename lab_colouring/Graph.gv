@@ -1,0 +1,24 @@
+graph {
+	3 [fillcolor=blue style=filled]
+	3
+	1 [fillcolor=green style=filled]
+	1
+	7 [fillcolor=green style=filled]
+	7
+	6 [fillcolor=red style=filled]
+	6
+	5 [fillcolor=green style=filled]
+	5
+	4 [fillcolor=red style=filled]
+	4
+	2 [fillcolor=blue style=filled]
+	2
+	3 -- 1
+	3 -- 7
+	3 -- 6
+	3 -- 5
+	3 -- 4
+	1 -- 4
+	1 -- 2
+	7 -- 6
+}
