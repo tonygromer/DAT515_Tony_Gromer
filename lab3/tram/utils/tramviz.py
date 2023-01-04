@@ -42,18 +42,15 @@ def show_shortest(dep, dest):
         quickest = [stop[0] for stop in quickest_nodes['path']]
         shortest = [stop[0] for stop in shortest_nodes['path']]
 
-        timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(quickest_nodes['dist']) + ' minutes'
-        geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(round(shortest_nodes['dist'],3)) + ' km'
-
     else:
-        time_dij = dijkstra(network,dep, network.transition_time)[dest]
-        dist_dij = dijkstra(network, dep, network.geo_distance)[dest]
+        quickest_nodes = dijkstra(network,dep, network.transition_time)[dest]
+        shortest_nodes = dijkstra(network, dep, network.geo_distance)[dest]
 
-        quickest = time_dij['path']
-        shortest = dist_dij['path']
+        quickest = quickest_nodes['path']
+        shortest = shortest_nodes['path']
         
-        timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(time_dij['dist']) + ' minutes'
-        geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(round(dist_dij['dist'],3)) + ' km'
+    timepath = 'Quickest: ' + ', '.join(quickest) + ', ' + str(quickest_nodes['dist']) + ' minutes'
+    geopath = 'Shortest: ' + ', '.join(shortest) + ', ' + str(round(shortest_nodes['dist'],3)) + ' km'
 
     def colors(v):
         if v in shortest and v in quickest:
@@ -65,7 +62,6 @@ def show_shortest(dep, dest):
         else:
             return 'white'
                 
-
     # this part should be left as it is:
     # change the SVG image with your shortest path colors
     color_svg_network(colormap=colors) # type: ignore

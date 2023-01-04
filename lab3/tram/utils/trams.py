@@ -77,10 +77,7 @@ class TramNetwork(WeightedGraph):
         return min(time_between)
 
 
-
-
 # Bonus task 1: take changes into account and show used tram lines
-
 
     def specialize_stops_to_lines(self):
         # TODO: write this function as specified
@@ -100,7 +97,6 @@ class TramNetwork(WeightedGraph):
                     edgelist.append((v1,v2))
 
         
-
         weightlist = {}
         """
         for stop1 in self._timedict:
@@ -112,19 +108,15 @@ class TramNetwork(WeightedGraph):
                     
                 weightlist[(stop1_temp, stop2_temp)] = w
         """
-        
+        """
         for edge in edgelist:
             vert1 = edge[0]
             vert2 = edge[1]
             
-            
             weightlist[edge] = self.specialized_transition_time(vert1,vert2)
-
-            
+        """
 
         start_list = {'edgelist': edgelist, 'weight': weightlist}
-        #self._adjlist = dict()
-        #self._weightlist = dict()
         super().__init__(start_list)
 
         return self
